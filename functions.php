@@ -2,7 +2,15 @@
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
     add_theme_support('menus');
+    add_theme_support('custom-logo', [
+        'height'      => 80,
+        'width'       => 80,
+        'flex-height' => true,
+        'flex-width'  => true,
+    ]);
     register_nav_menu('header', 'Menu Principal');
+    register_nav_menu('footer', 'Menu Footer');
+    add_theme_support('post-thumbnails');
 });
 
 function montheme_init() {
@@ -17,36 +25,27 @@ function montheme_init() {
     ]);
 }
 
-
-
-
-
 add_action('init', 'montheme_init');
-add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_style(
-        'bootstrap-css',
-        'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
-        [],
-        '5.3.2'
-    );
-
-    wp_enqueue_script(
-        'bootstrap-js',
-        'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js',
-        [],
-        '5.3.2',
-        true
-    );
-});
 
 add_filter('nav_menu_css_class', function ($classes){
     $classes[] = 'nav-item';
     return $classes;
 });
 
-add_filter('nav_menu_link_attributes', function ($atts){
-    $atts['class'] = 'nav-link';
+add_filter('nav_menu_link_attributes', function ($atts, $item){
+    $classes = ['nav-link'];
+
+    if (
+        in_array('current-menu-item', $item->classes, true) ||
+        in_array('current_page_item', $item->classes, true) ||
+        in_array('current-menu-ancestor', $item->classes, true)
+    ) {
+        $classes[] = 'active';
+        $atts['aria-current'] = 'page';
+    }
+
+    $atts['class'] = implode(' ', $classes);
     return $atts;
-});
+}, 10, 2);
 
 ?>

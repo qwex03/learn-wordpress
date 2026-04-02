@@ -1,29 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/style.css">
+    <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/style.css'); ?>">
     <?php wp_head(); ?>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <span class="navbar-brand" href="#"><?php bloginfo('name'); ?></span>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+<body <?php body_class('page-container'); ?>>
+    <?php wp_body_open(); ?>
+
+    <header class="site-header">
+        <div class="container site-header-inner">
+            <a href="<?php echo esc_url(home_url('/')); ?>" class="site-brand">
+                <?php if (has_custom_logo()) : ?>
+                    <?php the_custom_logo(); ?>
+                <?php endif; ?>
+                <span class="site-brand-name"><?php bloginfo('name'); ?></span>
+            </a>
+
+            <nav class="site-navigation" aria-label="Navigation principale">
                 <?php
                 wp_nav_menu(array(
                     'theme_location' => 'header',
                     'container'      => false,
-                    'menu_class'     => 'navbar-nav ms-auto',
+                    'menu_class'     => 'site-nav',
                     'depth'          => 2
                 ));
                 ?>
-            </div>
-            <?php get_search_form(); ?>
+            </nav>
         </div>
-    </nav>
-    
+    </header>
+
+    <main class="site-main">
